@@ -283,8 +283,10 @@
     };
     const open = () => { overlay.classList.add("open"); input.value = ""; render(""); input.focus(); };
     const close = () => overlay.classList.remove("open");
+    document.querySelectorAll("[data-cmdk-open]").forEach((b) => b.addEventListener("click", open));
     document.addEventListener("keydown", (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); open(); }
+      if (e.key === "/" && !overlay.classList.contains("open") && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); open(); }
       if (e.key === "Escape") close();
       if (overlay.classList.contains("open") && (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp")) {
         e.preventDefault();

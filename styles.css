@@ -298,6 +298,14 @@ footer{border-top:1px solid var(--line);padding:64px 0 40px;margin-top:60px}
 .mt-2{margin-top:22px}.mt-4{margin-top:44px}.mt-6{margin-top:66px}.mb-4{margin-bottom:44px}
 .note-strip{font-family:var(--font-mono);font-size:.78rem;color:var(--orange);border:1px dashed rgba(249,115,22,.5);border-radius:12px;padding:14px 20px;background:rgba(249,115,22,.05)}
 
+/* ---------- nav search + hero hint ---------- */
+.nav-search{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:99px;padding:7px 13px;color:var(--muted);cursor:pointer;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;transition:all .25s;flex-shrink:0}
+.nav-search svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.nav-search:hover{color:#fff;border-color:rgba(239,68,68,.55);background:rgba(239,68,68,.08)}
+.hero-hint{display:inline-flex;align-items:center;gap:7px;margin-top:22px;font-family:var(--font-mono);font-size:.74rem;color:var(--muted);letter-spacing:.05em;cursor:pointer;transition:color .25s;flex-wrap:wrap}
+.hero-hint:hover{color:var(--red-bright)}
+@media(max-width:640px){.nav-search .kbd{display:none}.nav-search{padding:8px 10px}}
+
 /* ---------- github links ---------- */
 .gh-link{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.08em;color:var(--red-bright);border-bottom:1px dashed rgba(239,68,68,.5);padding-bottom:2px;transition:color .25s,border-color .25s}
 .gh-link svg{width:15px;height:15px;fill:currentColor;transition:transform .3s}
