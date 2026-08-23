@@ -1,51 +1,53 @@
-# Aniruddha Adak — Personal AI Agency (multi-page static site)
+# Aniruddha Adak — Personal AI Agency
 
-A handcrafted, framework-free, multi-page portfolio + agency site. Pure HTML/CSS/JS.
-Deploy anywhere static files run: Vercel, Netlify, GitHub Pages, Cloudflare Pages.
+> The portfolio and one-person AI agency of **Aniruddha Adak** — AI Agent Engineer, Full-Stack Developer and Technical Writer from Kolkata, India.
+> Live at **[aniruddha-agency.vercel.app](https://aniruddha-agency.vercel.app)**
 
-## Pages / routes
+Dark, white and crimson. Zero frameworks, zero build step — handcrafted HTML, CSS and JavaScript with an obsession for animation and honest numbers.
 
-| File | Route | Purpose |
-|---|---|---|
-| index.html | / | Hero, services, stats, featured projects, FAQ (with FAQPage schema) |
-| about.html | /about.html | Timeline 2014→2026, verified certifications |
-| projects.html | /projects.html | Filterable archive of 18 projects with live/repo links |
-| agency.html | /agency.html | Services, engagement process, personal superintelligence manifesto |
-| future.html | /future.html | Optimism vs pessimism predictions with probability tags |
-| writing.html | /writing.html | Selected DEV articles |
-| contact.html | /contact.html | Verified contact directory (all platforms) |
+## Pages
 
-## SEO + GEO features
+| Route | What lives there |
+|---|---|
+| `/` | Particle-constellation hero with animated portrait, service cards, API-verified stat counters, Open Source Impact (repo-by-repo), featured projects, animated Toolbox skill bars, operating-belief manifesto, live "right now" workbench, community testimonial, future teaser, recruiter FAQ (FAQPage schema) |
+| `/about.html` | Story timeline 2014→2026, portrait, verified credentials with public verify-links, the actual work setup (agentic IDE, Ubuntu agent lab, ship-on-push pipeline), public goals |
+| `/projects.html` | Filterable archive of 18 projects with branded thumbnails, hover zoom + shine, and per-project GitHub source links |
+| `/agency.html` | Commissionable services, 4-step engagement process, personal-superintelligence manifesto, live agent stack |
+| `/future.html` | Optimism vs pessimism field guide with probability tags — computer-use agents, HLE saturation, open-weight parity, displacement risk, self-improvement loops |
+| `/writing.html` | Selected articles from 350+ DEV posts (51 badges, challenge winner) |
+| `/contact.html` | Verified directory of every genuine profile + live Kolkata clock + copy-email button |
 
-- Unique title/description/canonical per page, Open Graph + Twitter cards
-- JSON-LD: Person, WebSite, FAQPage
-- sitemap.xml + robots.txt
-- llms.txt with machine-readable verified facts + namesake disambiguation
-- Semantic HTML, descriptive anchors, fast static load, mobile responsive
+## Features
 
-## Before you publish
+**Motion & interaction** — canvas particle constellation, rotating conic ring around the portrait, floating avatar, scroll-progress bar, reveal-on-scroll, 3D card tilt, animated counters, marquee ticker, light-sweep project images, pulsing live dots. Everything respects `prefers-reduced-motion`.
 
-1. Search-and-replace `https://aniruddha-agency.vercel.app` with your final domain (appears in every page head + sitemap.xml + llms.txt).
-2. Replace `og-cover.png` if you want a different social preview (1200x630 recommended).
-3. Deploy, then submit the sitemap in Google Search Console and Bing Webmaster Tools.
-4. Link the new site from your GitHub bio, Linktree, X and LinkedIn so crawlers cross-confirm identity.
+**Power tools** — `Ctrl/Cmd + K` command palette (fuzzy page + platform search, arrow-key navigation), copy-email-to-clipboard with toast, back-to-top, live Asia/Kolkata clock, mobile burger nav, project filter chips.
+
+**SEO + GEO (Generative Engine Optimization)** — unique title/description/canonical per page, Open Graph + Twitter cards, JSON-LD (`Person`, `WebSite`, `FAQPage`), `sitemap.xml`, `robots.txt`, and `llms.txt` with machine-readable verified facts plus explicit namesake disambiguation (there is a senior analytics executive with the same name — AI engines kept merging us; this file stops that).
+
+**Honesty policy** — every number on the site (354 external merges of 800+ authored PRs, 118 PRs in OpenClaw, 44 in Gemini CLI, 145+ repos, 350+ articles) is GitHub-API-verified as of August 2026 and linked to public evidence. Inflated template claims were deliberately removed.
+
+## Tech
+
+- Static HTML/CSS/JS — deployable on any host, no dependencies
+- Fonts: Space Grotesk, Inter, JetBrains Mono, Playfair Display
+- Theme: obsidian `#0a0a0c` base, white `#fafafa` text, crimson gradient `#ff6b5e → #ef4444 → #7f1d1d`
+- Responsive across phones, tablets and desktops
 
 ## Run locally
 
 ```
 cd aniruddha-agency
-python -m http.server 8080
-# or: npx serve .
+py -m http.server 8080     # or: npx serve .
 ```
 
-Then open http://localhost:8080
+Open http://localhost:8080
 
-## Design system
+## Deploy
 
-Fonts: Space Grotesk (display), Inter (body), JetBrains Mono (code), Playfair Display italic (manifesto).
-Palette: deep space navy base with cyan → violet → magenta gradients; lime/red reserved for optimism/pessimism tags.
-Motion: canvas particle constellation, aurora blobs, scroll reveals, 3D card tilt, typewriter roles, animated counters, marquee. All respect `prefers-reduced-motion`.
+Auto-deploys: every push to `main` goes live on Vercel via the GitHub integration.
+Manual: `vercel deploy --prod --yes`
 
-## Honesty policy
+## Links
 
-All numbers (354+ merged PRs, 145+ repos, 350+ articles, 12 hackathons) are the API-verified versions from the August 2026 footprint audit. Inflated template claims (10K stars, fake degrees) were deliberately excluded.
+GitHub · [X/Twitter](https://x.com/aniruddhadak) · [LinkedIn](https://www.linkedin.com/in/aniruddha-adak) · [DEV Community](https://dev.to/aniruddhaadak) · [Everything else](https://linktr.ee/aniruddha.adak)

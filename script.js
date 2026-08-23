@@ -215,4 +215,101 @@
 
   /* ---------- Year stamp ---------- */
   document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
+
+  /* ---------- Back to top ---------- */
+  const backTop = document.querySelector(".back-top");
+  if (backTop) {
+    window.addEventListener(
+      "scroll",
+      () => backTop.classList.toggle("show", window.scrollY > 600),
+      { passive: true }
+    );
+    backTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  }
+
+  /* ---------- Copy-to-clipboard + toast ---------- */
+  const toast = document.querySelector(".toast");
+  let toastTimer;
+  const showToast = (msg) => {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+  };
+  document.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      const text = btn.dataset.copy;
+      const done = () => showToast("copied to clipboard: " + text);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(done);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); } catch (e) {}
+        document.body.removeChild(ta); done();
+      }
+    });
+  });
+
+  /* ---------- Command palette (Ctrl/Cmd + K) ---------- */
+  const overlay = document.querySelector(".cmdk-overlay");
+  if (overlay) {
+    const input = overlay.querySelector(".cmdk-input");
+    const list = overlay.querySelector(".cmdk-list");
+    const items = [
+      { t: "Home", s: "page", u: "index.html" },
+      { t: "About — story & timeline", s: "page", u: "about.html" },
+      { t: "Projects — full archive", s: "page", u: "projects.html" },
+      { t: "Agency — services", s: "page", u: "agency.html" },
+      { t: "Future — predictions", s: "page", u: "future.html" },
+      { t: "Writing — articles", s: "page", u: "writing.html" },
+      { t: "Contact — all links", s: "page", u: "contact.html" },
+      { t: "GitHub — aniruddhaadak80", s: "external", u: "https://github.com/aniruddhaadak80" },
+      { t: "X — @aniruddhadak", s: "external", u: "https://x.com/aniruddhadak" },
+      { t: "LinkedIn", s: "external", u: "https://www.linkedin.com/in/aniruddha-adak" },
+      { t: "DEV Community", s: "external", u: "https://dev.to/aniruddhaadak" },
+      { t: "Email me", s: "action", u: "mailto:aniruddhaadak80@gmail.com" },
+    ];
+    const render = (q) => {
+      const filtered = items.filter((i) => i.t.toLowerCase().includes(q.toLowerCase()));
+      list.innerHTML = filtered
+        .map((i, idx) => `<li data-u="${i.u}" class="${idx === 0 ? "sel" : ""}">${i.t}<span>${i.s}</span></li>`)
+        .join("");
+      list.querySelectorAll("li").forEach((li) =>
+        li.addEventListener("click", () => { window.location.href = li.dataset.u; })
+      );
+    };
+    const open = () => { overlay.classList.add("open"); input.value = ""; render(""); input.focus(); };
+    const close = () => overlay.classList.remove("open");
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); open(); }
+      if (e.key === "Escape") close();
+      if (overlay.classList.contains("open") && (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp")) {
+        e.preventDefault();
+        const lis = [...list.querySelectorAll("li")];
+        if (!lis.length) return;
+        let idx = lis.findIndex((li) => li.classList.contains("sel"));
+        if (e.key === "ArrowDown") { lis[idx].classList.remove("sel"); idx = (idx + 1) % lis.length; lis[idx].classList.add("sel"); }
+        if (e.key === "ArrowUp") { lis[idx].classList.remove("sel"); idx = (idx - 1 + lis.length) % lis.length; lis[idx].classList.add("sel"); }
+        if (e.key === "Enter") window.location.href = lis[idx].dataset.u;
+      }
+    });
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
+    input.addEventListener("input", () => render(input.value));
+  }
+
+  /* ---------- Kolkata live clock ---------- */
+  const clocks = document.querySelectorAll("[data-clock]");
+  if (clocks.length) {
+    const tick = () => {
+      const now = new Date().toLocaleTimeString("en-IN", {
+        timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true,
+      });
+      clocks.forEach((c) => (c.textContent = now));
+    };
+    tick();
+    setInterval(tick, 1000);
+  }
 })();
