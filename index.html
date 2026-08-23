@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -15,7 +15,7 @@
 <meta property="og:image" content="https://aniruddha-agency.vercel.app/og-cover.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@aniruddhadak">
-<meta name="theme-color" content="#05070f">
+<meta name="theme-color" content="#0a0a0c">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <script type="application/ld+json">
@@ -58,6 +58,7 @@
 </head>
 <body>
 
+<div id="scroll-progress"></div>
 <div class="aurora"><span></span><span></span><span></span></div>
 <div class="grid-overlay"></div>
 
@@ -80,7 +81,8 @@
 
 <header class="hero">
   <canvas id="particles"></canvas>
-  <div class="wrap">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
     <span class="status-pill reveal in-view"><span class="dot"></span>available for agentic projects</span>
     <h1 class="reveal in-view">ANIRUDDHA<span class="row2 grad-text">ADAK</span></h1>
     <div class="role-line mono reveal in-view" data-delay="1">
@@ -102,6 +104,13 @@
       <div><strong><span data-count="350" data-suffix="+">0</span></strong><span>technical articles</span></div>
       <div><strong><span data-count="25" data-suffix="+">0</span></strong><span>ai apps built</span></div>
     </div>
+    </div>
+    <div class="portrait-wrap reveal in-view" data-delay="2">
+      <div class="portrait">
+        <img src="assets/aniruddha-photo.jpg" alt="Aniruddha Adak — AI Agent Engineer, Kolkata" loading="eager">
+        <span class="portrait-badge">AI AGENT ENGINEER &middot; KOLKATA</span>
+      </div>
+    </div>
   </div>
   <div class="scroll-hint">scroll &darr;</div>
 </header>
@@ -119,37 +128,37 @@
     <h2 class="h2 reveal" data-delay="1">One human. <span class="grad-text">A whole stack of agents.</span></h2>
     <p class="lead reveal mb-4" data-delay="2">Every service below is something I have actually built, broken, debugged and shipped — for my own products and for open source projects used by thousands of developers.</p>
     <div class="grid g3">
-      <article class="card reveal" data-tilt><span class="card-glow" style="background:#22d3ee"></span>
+      <article class="card reveal" data-tilt><span class="card-glow" style="background:#ef4444"></span>
         <div class="card-icon">&#129302;</div>
         <h3>AI Agent Engineering</h3>
         <p>Multi-agent systems that plan, delegate and self-correct using LangGraph and CrewAI. From repo-maintenance bots to research assistants that cite their sources.</p>
         <div class="tags"><span class="tag">langgraph</span><span class="tag">crewai</span><span class="tag">tool use</span></div>
       </article>
-      <article class="card reveal" data-delay="1" data-tilt><span class="card-glow" style="background:#8b5cf6"></span>
+      <article class="card reveal" data-delay="1" data-tilt><span class="card-glow" style="background:#b91c1c"></span>
         <div class="card-icon">&#9889;</div>
         <h3>Agentic Web Applications</h3>
         <p>Full-stack products where the UI is only the surface: resume analyzers, real-time dashboards, voice tools. Next.js front ends over agent back ends.</p>
         <div class="tags"><span class="tag">next.js</span><span class="tag">typescript</span><span class="tag">gemini api</span></div>
       </article>
-      <article class="card reveal" data-delay="2" data-tilt><span class="card-glow" style="background:#ec4899"></span>
+      <article class="card reveal" data-delay="2" data-tilt><span class="card-glow" style="background:#7f1d1d"></span>
         <div class="card-icon">&#128218;</div>
         <h3>RAG &amp; Knowledge Systems</h3>
         <p>Retrieval pipelines that turn messy documents into answers with citations. Enterprise knowledge management without the enterprise price tag.</p>
         <div class="tags"><span class="tag">embeddings</span><span class="tag">vector search</span><span class="tag">citations</span></div>
       </article>
-      <article class="card reveal" data-delay="1" data-tilt><span class="card-glow" style="background:#fbbf24"></span>
+      <article class="card reveal" data-delay="1" data-tilt><span class="card-glow" style="background:#ff6b5e"></span>
         <div class="card-icon">&#128295;</div>
         <h3>Open Source Engineering</h3>
         <p>Bug hunting across the ecosystem: 118 pull requests in OpenClaw alone, fixes in Gemini CLI, Rocket.Chat and more. Your repo could be next.</p>
         <div class="tags"><span class="tag">354 merged prs</span><span class="tag">pull shark &times;3</span></div>
       </article>
-      <article class="card reveal" data-delay="2" data-tilt><span class="card-glow" style="background:#a3e635"></span>
+      <article class="card reveal" data-delay="2" data-tilt><span class="card-glow" style="background:#e4e4e7"></span>
         <div class="card-icon">&#9997;&#65039;</div>
         <h3>Technical Writing &amp; GEO</h3>
         <p>350+ articles explaining agents, harnesses and model releases in plain language. Plus generative engine optimization so AI engines cite your product.</p>
         <div class="tags"><span class="tag">dev.to</span><span class="tag">tutorials</span><span class="tag">geo</span></div>
       </article>
-      <article class="card reveal" data-delay="3" data-tilt><span class="card-glow" style="background:#22d3ee"></span>
+      <article class="card reveal" data-delay="3" data-tilt><span class="card-glow" style="background:#ef4444"></span>
         <div class="card-icon">&#129517;</div>
         <h3>Personal Superintelligence</h3>
         <p>Designing your own stack of agents, automations and workflows so one person can operate like a team. My own system runs my research, writing and shipping.</p>
@@ -176,7 +185,7 @@
     <div class="grid g3">
 
       <article class="project-card card reveal" data-tilt onclick="location.href='projects.html'">
-        <div class="thumb" style="--pc1:#134e4a;--pc2:#1e3a8a"><b>CZ</b></div>
+        <div class="thumb"><img src="img/projects/careerzen.png" alt="CareerZen project thumbnail" loading="lazy"><span class="shine"></span></div>
         <div class="project-top"><span class="proj-num">01 / FLAGSHIP</span><span class="badge-live">&#9679; live</span></div>
         <h3>CareerZen — Voice ATS Resume Analyzer</h3>
         <p>Final-year flagship: analyzes resumes against job descriptions with voice mock interviews. Gemini + Sarvam AI, Lighthouse 94, fully MIT open source.</p>
@@ -184,7 +193,7 @@
       </article>
 
       <article class="project-card card reveal" data-delay="1" data-tilt onclick="location.href='projects.html'">
-        <div class="thumb" style="--pc1:#4c1d95;--pc2:#831843"><b>SS</b></div>
+        <div class="thumb"><img src="img/projects/skillsphere.png" alt="SkillSphere project thumbnail" loading="lazy"><span class="shine"></span></div>
         <div class="project-top"><span class="proj-num">02 / PLATFORM</span><span class="badge-live">&#9679; live</span></div>
         <h3>SkillSphere — 10-in-1 Life Platform</h3>
         <p>Ten micro-apps for well-being and productivity behind one roof: habits, focus, tracking and community in a single Next.js codebase.</p>
@@ -192,7 +201,7 @@
       </article>
 
       <article class="project-card card reveal" data-delay="2" data-tilt onclick="location.href='projects.html'">
-        <div class="thumb" style="--pc1:#164e63;--pc2:#312e81"><b>VS</b></div>
+        <div class="thumb"><img src="img/projects/vocalscribe.png" alt="VocalScribe project thumbnail" loading="lazy"><span class="shine"></span></div>
         <div class="project-top"><span class="proj-num">03 / VOICE AI</span><span class="badge-live">&#9679; live</span></div>
         <h3>VocalScribe — Speech to Text</h3>
         <p>"Where your voice becomes words." Instant transcription built on AssemblyAI speech intelligence with a clean React interface.</p>
@@ -200,7 +209,7 @@
       </article>
 
       <article class="project-card card reveal" data-tilt onclick="location.href='projects.html'">
-        <div class="thumb" style="--pc1:#713f12;--pc2:#134e4a"><b>TL</b></div>
+        <div class="thumb"><img src="img/projects/terralens.png" alt="TerraLens project thumbnail" loading="lazy"><span class="shine"></span></div>
         <div class="project-top"><span class="proj-num">04 / EARTH AI</span><span class="badge-live">&#9679; live</span></div>
         <h3>TerraLens — See Your Planet</h3>
         <p>Environmental insights app powered by Gemini, built for Earth Day as a DEV challenge submission. Your planet, visualized and explained.</p>
@@ -208,7 +217,7 @@
       </article>
 
       <article class="project-card card reveal" data-delay="1" data-tilt onclick="location.href='projects.html'">
-        <div class="thumb" style="--pc1:#3b0764;--pc2:#0c4a6e"><b>NF</b></div>
+        <div class="thumb"><img src="img/projects/nexusforge.png" alt="NexusForge project thumbnail" loading="lazy"><span class="shine"></span></div>
         <div class="project-top"><span class="proj-num">05 / AGENTS</span><span class="badge-live">&#9679; live</span></div>
         <h3>NexusForge — Multimodal Agent Hub</h3>
         <p>A multimodal AI agent hub wired into Notion through MCP: capture notes, ask questions across workspaces, let agents do the filing.</p>
@@ -216,7 +225,7 @@
       </article>
 
       <article class="project-card card reveal" data-delay="2" data-tilt onclick="location.href='projects.html'">
-        <div class="thumb" style="--pc1:#0f766e;--pc2:#581c87"><b>MH</b></div>
+        <div class="thumb"><img src="img/projects/mindcareai.png" alt="MindCareAI project thumbnail" loading="lazy"><span class="shine"></span></div>
         <div class="project-top"><span class="proj-num">06 / WELLNESS</span><span class="badge-live">&#9679; live</span></div>
         <h3>MindCareAI — Mental Health Companion</h3>
         <p>A judgment-free AI companion for journaling and mood tracking, launched on Product Hunt. Careful prompt design meets humane UX.</p>

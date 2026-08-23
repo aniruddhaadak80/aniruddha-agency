@@ -7,6 +7,17 @@
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ---------- scroll progress bar ---------- */
+  const progress = document.getElementById("scroll-progress");
+  if (progress) {
+    const onProg = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + "%";
+    };
+    window.addEventListener("scroll", onProg, { passive: true });
+    onProg();
+  }
+
   /* ---------- Mobile nav ---------- */
   const burger = document.querySelector(".burger");
   const navLinks = document.querySelector(".nav-links");
@@ -152,7 +163,7 @@
   if (canvas && !prefersReduced) {
     const ctx = canvas.getContext("2d");
     let w, h, pts = [], raf;
-    const COLORS = ["34,211,238", "139,92,246", "236,72,153", "163,230,53"];
+    const COLORS = ["239,68,68", "250,250,250", "185,28,28", "255,107,94"];
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       w = canvas.offsetWidth; h = canvas.offsetHeight;
