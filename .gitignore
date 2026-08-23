@@ -1,0 +1,16 @@
+# OS / editor junk
+Thumbs.db
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# local helper scripts (image generators)
+*.ps1
+
+# python cache
+__pycache__/
+*.pyc
+
+# deps (none needed, but just in case)
+node_modules/
