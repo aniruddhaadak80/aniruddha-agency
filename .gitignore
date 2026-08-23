@@ -14,3 +14,6 @@ __pycache__/
 
 # deps (none needed, but just in case)
 node_modules/
+
+.vercel
+.env*
