@@ -6,6 +6,87 @@
   "use strict";
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.documentElement.classList.add("js");
+
+  /* ---------- preloader ---------- */
+  const pre = document.querySelector(".preloader");
+  if (pre) {
+    const hidePre = () => { pre.classList.add("done"); setTimeout(() => pre.remove(), 700); };
+    if (document.readyState === "complete") setTimeout(hidePre, 500);
+    else window.addEventListener("load", () => setTimeout(hidePre, 400));
+    setTimeout(hidePre, 2600);
+  }
+
+  /* ---------- cursor aura (desktop) ---------- */
+  const aura = document.querySelector(".cursor-glow");
+  if (aura && window.matchMedia("(pointer:fine)").matches && !prefersReduced) {
+    let ax = -200, ay = -200, tx = -200, ty = -200;
+    window.addEventListener("pointermove", (e) => {
+      tx = e.clientX; ty = e.clientY; aura.classList.add("on");
+    }, { passive: true });
+    (function auraLoop() {
+      ax += (tx - ax) * 0.08; ay += (ty - ay) * 0.08;
+      aura.style.transform = `translate(${ax}px,${ay}px) translate(-50%,-50%)`;
+      requestAnimationFrame(auraLoop);
+    })();
+    document.addEventListener("mouseleave", () => aura.classList.remove("on"));
+  }
+
+  /* ---------- magnetic buttons ---------- */
+  if (window.matchMedia("(pointer:fine)").matches && !prefersReduced) {
+    document.querySelectorAll(".btn").forEach((btn) => {
+      btn.classList.add("magnet");
+      btn.addEventListener("mousemove", (ev) => {
+        const r = btn.getBoundingClientRect();
+        const x = ev.clientX - r.left - r.width / 2;
+        const y = ev.clientY - r.top - r.height / 2;
+        btn.style.transform = `translate(${x * 0.18}px,${y * 0.22 - 2}px)`;
+      });
+      btn.addEventListener("mouseleave", () => (btn.style.transform = ""));
+    });
+  }
+
+  /* ---------- heading word rise ---------- */
+  const wrapWords = (node) => {
+    [...node.childNodes].forEach((child) => {
+      if (child.nodeType === 3 && child.textContent.trim()) {
+        const frag = document.createDocumentFragment();
+        child.textContent.split(/(\s+)/).forEach((part) => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+          const w = document.createElement("span"); w.className = "w";
+          const wi = document.createElement("span"); wi.className = "wi"; wi.textContent = part;
+          w.appendChild(wi); frag.appendChild(w);
+        });
+        node.replaceChild(frag, child);
+      } else if (child.nodeType === 1 && !child.classList.contains("w")) {
+        wrapWords(child);
+      }
+    });
+  };
+  document.querySelectorAll(".h2").forEach((h) => { if (h.dataset.words !== "no") wrapWords(h); });
+  if ("IntersectionObserver" in window) {
+    const hio = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll(".wi").forEach((wi, i) => (wi.style.transitionDelay = `${i * 55}ms`));
+          e.target.classList.add("words-in");
+          hio.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll(".h2").forEach((h) => hio.observe(h));
+  } else {
+    document.querySelectorAll(".h2").forEach((h) => h.classList.add("words-in"));
+  }
+
+  /* ---------- image fade-in ---------- */
+  const markLoaded = (img) => {
+    if (img.complete) img.classList.add("loaded");
+    else img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+    img.addEventListener("error", () => img.classList.add("loaded"), { once: true });
+  };
+  document.querySelectorAll(".thumb img,.portrait img").forEach(markLoaded);
 
   /* ---------- scroll progress bar ---------- */
   const progress = document.getElementById("scroll-progress");
