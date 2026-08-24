@@ -383,6 +383,40 @@
     input.addEventListener("input", () => render(input.value));
   }
 
+  /* ---------- terminal widget ---------- */
+  const termInput = document.querySelector(".term-input");
+  const termBody = document.querySelector(".term-body");
+  if (termInput && termBody) {
+    const cmds = {
+      help: "available: help · projects · agency · future · writing · contact · about · github · x · linkedin · email · clear",
+      projects: () => (location.href = "projects.html"),
+      agency: () => (location.href = "agency.html"),
+      future: () => (location.href = "future.html"),
+      writing: () => (location.href = "writing.html"),
+      contact: () => (location.href = "contact.html"),
+      about: () => (location.href = "about.html"),
+      github: () => window.open("https://github.com/aniruddhaadak80", "_blank"),
+      x: () => window.open("https://x.com/aniruddhadak", "_blank"),
+      linkedin: () => window.open("https://www.linkedin.com/in/aniruddha-adak", "_blank"),
+      email: () => (location.href = "mailto:aniruddhaadak80@gmail.com"),
+      clear: () => (termBody.innerHTML = ""),
+    };
+    termInput.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+      const raw = termInput.value.trim().toLowerCase();
+      termBody.insertAdjacentHTML("beforeend", `<div><span class="term-prompt">aniruddha@agency:~$</span> ${raw}</div>`);
+      termInput.value = "";
+      const fn = cmds[raw];
+      if (fn) {
+        if (typeof fn === "string") termBody.insertAdjacentHTML("beforeend", `<div style="color:var(--muted)">${fn}</div>`);
+        else fn();
+      } else if (raw) {
+        termBody.insertAdjacentHTML("beforeend", `<div style="color:#f97316">unknown: ${raw} — try help</div>`);
+      }
+      termBody.scrollTop = termBody.scrollHeight;
+    });
+  }
+
   /* ---------- Kolkata live clock ---------- */
   const clocks = document.querySelectorAll("[data-clock]");
   if (clocks.length) {
