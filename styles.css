@@ -425,12 +425,60 @@ footer{border-top:1px solid var(--line);padding:64px 0 40px;margin-top:60px}
 
 /* ---------- print stylesheet ---------- */
 @media print{
-  .nav,.aurora,.grid-overlay,.grain,.cursor-glow,.preloader,.back-top,.cmdk-overlay,.toast,.scroll-hint,.marquee,.side-rail,.cta-band,.hero-actions,.scroll-progress{display:none !important}
+  .nav,.aurora,.grid-overlay,.grain,.cursor-glow,.preloader,.back-top,.cmdk-overlay,.toast,.scroll-hint,.marquee,.side-rail,.cta-band,.hero-actions,.scroll-progress,.chatbot,.shortcuts-modal{display:none !important}
   body{background:#fff;color:#111}
   .card,.panel,.manifesto{border-color:#ddd;background:#fff;box-shadow:none}
   .grad-text{color:#991b1b !important;-webkit-text-fill-color:#991b1b}
   a{color:#991b1b}
 }
+
+/* ---------- AgentAni chat ---------- */
+.chatbot{position:fixed;right:22px;bottom:22px;z-index:250;display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+.chat-launcher{position:relative;width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;background:var(--grad);color:#fff;display:grid;place-items:center;box-shadow:0 10px 34px rgba(239,68,68,.5);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.chat-launcher:hover{transform:scale(1.08) rotate(-6deg);box-shadow:0 14px 44px rgba(239,68,68,.65)}
+.chat-launcher .chat-dot{position:absolute;top:4px;right:4px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid var(--red);animation:blink 1.6s infinite}
+.chat-launcher.ping{animation:chatPing 1s cubic-bezier(.2,.8,.2,1) 3}
+@keyframes chatPing{0%{box-shadow:0 10px 34px rgba(239,68,68,.5)}50%{box-shadow:0 0 0 18px rgba(239,68,68,.15)}100%{box-shadow:0 10px 34px rgba(239,68,68,.5)}}
+.chat-panel{width:min(370px,calc(100vw - 32px));max-height:min(560px,72vh);display:flex;flex-direction:column;background:#101014;border:1px solid rgba(239,68,68,.45);border-radius:20px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.75);opacity:0;visibility:hidden;transform:translateY(18px) scale(.97);transition:all .35s cubic-bezier(.2,.8,.2,1)}
+.chatbot.open .chat-panel{opacity:1;visibility:visible;transform:none}
+.chat-head{display:flex;align-items:center;gap:12px;padding:15px 18px;border-bottom:1px solid var(--line);background:rgba(239,68,68,.07)}
+.chat-avatar{width:38px;height:38px;border-radius:12px;background:var(--grad);display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:.85rem;color:#fff;flex-shrink:0}
+.chat-id b{font-family:var(--font-display);display:block;font-size:.95rem;line-height:1.2}
+.chat-id span{font-family:var(--font-mono);font-size:.62rem;color:var(--red-bright);letter-spacing:.08em}
+.chat-id span::first-letter{color:var(--red-bright)}
+.chat-x{margin-left:auto;background:none;border:0;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1;transition:color .2s,transform .3s}
+.chat-x:hover{color:#fff;transform:rotate(90deg)}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:200px}
+.chat-m{max-width:85%;padding:11px 15px;border-radius:15px;font-size:.86rem;line-height:1.55;animation:chatIn .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes chatIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chat-m.bot{align-self:flex-start;background:rgba(255,255,255,.05);border:1px solid var(--line);border-bottom-left-radius:4px;color:#e4e4e7}
+.chat-m.user{align-self:flex-end;background:var(--grad);color:#fff;border-bottom-right-radius:4px}
+.chat-m.typing{display:flex;gap:5px;padding:14px 18px}
+.chat-m.typing span{width:7px;height:7px;border-radius:50%;background:var(--red-bright);animation:chatBlink 1s infinite}
+.chat-m.typing span:nth-child(2){animation-delay:.18s}
+.chat-m.typing span:nth-child(3){animation-delay:.36s}
+@keyframes chatBlink{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+.chat-chips{display:flex;gap:8px;padding:0 16px 12px;flex-wrap:wrap}
+.chat-chips .chip{cursor:pointer;font-size:.68rem;padding:6px 13px}
+.chat-chips .chip:hover{background:var(--grad);color:#fff;border-color:transparent}
+.chat-inrow{display:flex;gap:10px;padding:12px 14px;border-top:1px solid var(--line)}
+.chat-in{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:11px 15px;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;transition:border-color .25s}
+.chat-in:focus{border-color:rgba(239,68,68,.55)}
+.chat-send{width:42px;height:42px;border-radius:12px;border:0;background:var(--grad);color:#fff;font-size:1.1rem;cursor:pointer;transition:transform .25s,box-shadow .25s}
+.chat-send:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(239,68,68,.5)}
+@media(max-width:640px){.chatbot{right:14px;bottom:14px}}
+
+/* ---------- shortcuts modal ---------- */
+.shortcuts-modal{position:fixed;inset:0;z-index:450;background:rgba(5,5,6,.72);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
+.shortcuts-modal.open{display:flex}
+.shortcuts-box{width:min(430px,94vw);background:#101014;border:1px solid rgba(239,68,68,.4);border-radius:18px;padding:28px;animation:cmdkIn .22s cubic-bezier(.2,.8,.2,1)}
+.shortcuts-box h3{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;color:var(--red-bright);margin-bottom:20px}
+.sc-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:11px 0;border-bottom:1px dashed var(--line);font-size:.86rem;color:#d4d4d8;flex-wrap:wrap}
+.sc-row:last-of-type{border-bottom:0}
+.sc-close{margin-top:22px;width:100%;justify-content:center}
+
+/* ---------- live feed chip ---------- */
+.live-chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.14em;color:var(--red-bright);text-transform:uppercase;border:1px dashed rgba(239,68,68,.45);border-radius:99px;padding:7px 15px;margin:6px 0 10px;animation:blink 2.4s infinite}
 .clock-strip b{color:var(--red-bright);font-weight:600}
 
 /* ---------- responsive refinements ---------- */

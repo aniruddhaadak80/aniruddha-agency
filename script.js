@@ -487,4 +487,199 @@
     tick();
     setInterval(tick, 1000);
   }
+
+  /* ---------- PWA service worker ---------- */
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+  }
+
+  /* ---------- live GitHub stats (graceful fallback) ---------- */
+  const ghRepos = document.getElementById("live-repos");
+  const ghFollowers = document.getElementById("live-followers");
+  if (ghRepos || ghFollowers) {
+    fetch("https://api.github.com/users/aniruddhaadak80")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => {
+        if (ghRepos && d.public_repos) ghRepos.textContent = d.public_repos;
+        if (ghFollowers && d.followers) ghFollowers.textContent = d.followers;
+      })
+      .catch(() => {});
+  }
+
+  /* ---------- live DEV articles feed ---------- */
+  const liveFeed = document.getElementById("dev-live-feed");
+  if (liveFeed) {
+    fetch("https://dev.to/api/articles?username=aniruddhaadak&per_page=6")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((arts) => {
+        if (!Array.isArray(arts) || !arts.length) return;
+        const rows = arts.map((a) => {
+          const d = new Date(a.published_at);
+          const date = d.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
+          const desc = (a.description || "").replace(/</g, "&lt;");
+          return `<a class="post-row" href="${a.url}" target="_blank" rel="noopener">
+            <span class="post-date">${date}</span>
+            <div class="post-title"><b>${a.title.replace(/</g, "&lt;")}</b><span>${desc.slice(0, 110)}${desc.length > 110 ? "..." : ""}</span></div>
+            <span class="post-tag">&#9829; ${a.positive_reactions_count || 0}</span>
+          </a>`;
+        }).join("");
+        liveFeed.innerHTML = `<div class="live-chip mono">&#9679; live from the dev.to api — refreshes itself</div>` + rows;
+      })
+      .catch(() => {});
+  }
+
+  /* ---------- reading time estimates ---------- */
+  document.querySelectorAll(".post-row").forEach((row) => {
+    const t = row.querySelector(".post-title span");
+    const title = row.querySelector(".post-title b");
+    if (!t || !title || t.dataset.rt) return;
+    const words = (title.textContent + " " + t.textContent).split(/\s+/).length;
+    const mins = Math.max(2, Math.round(words / 25));
+    t.dataset.rt = "1";
+    t.textContent += ` — about ${mins} min read`;
+  });
+
+  /* ---------- tab blur title ---------- */
+  const baseTitle = document.title;
+  document.addEventListener("visibilitychange", () => {
+    document.title = document.hidden ? "agent mode paused — come back" : baseTitle;
+  });
+
+  /* ---------- web share ---------- */
+  document.querySelectorAll("[data-share]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const data = { title: document.title, text: "Aniruddha Adak — AI Agent Engineer from Kolkata", url: location.origin };
+      if (navigator.share) {
+        try { await navigator.share(data); } catch (e) {}
+      } else {
+        try { await navigator.clipboard.writeText(data.url); showToast("link copied: " + data.url); }
+        catch (e) { showToast(data.url); }
+      }
+    });
+  });
+
+  /* ---------- keyboard shortcuts modal ---------- */
+  const shortcuts = [
+    ["Ctrl / Cmd + K", "open command palette"],
+    ["/", "quick-open command palette"],
+    ["Esc", "close palette or chat"],
+    ["&uarr; &darr; + Enter", "navigate palette results"],
+    ["&uarr;&uarr;&darr;&darr;&larr;&rarr;&larr;&rarr; B A", "definitely nothing"],
+  ];
+  const showShortcuts = () => {
+    let m = document.querySelector(".shortcuts-modal");
+    if (m) { m.classList.add("open"); return; }
+    m = document.createElement("div");
+    m.className = "shortcuts-modal";
+    m.innerHTML = `<div class="shortcuts-box"><h3>keyboard shortcuts</h3>` +
+      shortcuts.map((s) => `<div class="sc-row"><span class="kbd">${s[0]}</span><span>${s[1]}</span></div>`).join("") +
+      `<button class="btn btn-ghost sc-close">close</button></div>`;
+    document.body.appendChild(m);
+    m.addEventListener("click", (e) => { if (e.target === m) m.classList.remove("open"); });
+    m.querySelector(".sc-close").addEventListener("click", () => m.classList.remove("open"));
+  };
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "?" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) showShortcuts();
+  });
+
+  /* ---------- AgentAni chat widget ---------- */
+  const buildChat = () => {
+    const wrap = document.createElement("div");
+    wrap.className = "chatbot";
+    wrap.innerHTML = `
+      <button class="chat-launcher" aria-label="Chat with AgentAni">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span class="chat-dot"></span>
+      </button>
+      <div class="chat-panel" role="dialog" aria-label="AgentAni chat">
+        <div class="chat-head">
+          <span class="chat-avatar">AA</span>
+          <div class="chat-id"><b>AgentAni</b><span class="mono">&#9679; always on &middot; rule-based, zero cloud</span></div>
+          <button class="chat-x" aria-label="Close chat">&times;</button>
+        </div>
+        <div class="chat-msgs"></div>
+        <div class="chat-chips"></div>
+        <div class="chat-inrow">
+          <input class="chat-in" placeholder="ask about projects, hiring, skills..." aria-label="Message AgentAni">
+          <button class="chat-send" aria-label="Send">&rarr;</button>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+
+    const panel = wrap.querySelector(".chat-panel");
+    const msgs = wrap.querySelector(".chat-msgs");
+    const chipsEl = wrap.querySelector(".chat-chips");
+    const input = wrap.querySelector(".chat-in");
+    const launcher = wrap.querySelector(".chat-launcher");
+
+    const knowledge = [
+      { k: ["project", "built", "portfolio", "work", "app"], r: "Flagship: CareerZen — voice ATS resume analyzer (Gemini + Sarvam AI, Lighthouse 94, MIT). Then 17 more: SkillSphere, VocalScribe, TerraLens, NexusForge, MindCareAI. Full archive with GitHub links on the projects page." },
+      { k: ["hire", "price", "cost", "budget", "rate", "freelance", "available", "availability"], r: "He takes commissions: Starter from $499, Agentic Sprint from $1,999, custom retainers. Email aniruddhaadak80@gmail.com or use the agency page. Replies within 24-48 hours." },
+      { k: ["skill", "stack", "tech", "language", "framework"], r: "Core: React, Next.js, TypeScript, Node.js, Tailwind + Python, TensorFlow, LangGraph, CrewAI, RAG. The Toolbox section on the home page has animated bars for all of them." },
+      { k: ["open source", "github", "pr", "pull", "merge", "contribut"], r: "800+ PRs authored, 354 merged into external repos — 118 in OpenClaw (including merged fix #102951), 44 in Google's Gemini CLI. Pull Shark ×3. Hacktoberfest 2024 + 2025 with 200+ each." },
+      { k: ["who", "about", "bio", "yourself", "ani", "aniruddha"], r: "Aniruddha Adak — AI Agent Engineer from Kolkata, final-year B.Tech CSE at BBIT (MAKAUT). Builds autonomous agents, ships open source daily, writes 350+ articles. The about page has the full timeline." },
+      { k: ["contact", "email", "reach", "telegram", "phone", "dm"], r: "Fastest: aniruddhaadak80@gmail.com. Also X @aniruddhadak, Telegram t.me/aniruddhaadak, LinkedIn /in/aniruddha-adak. Full directory on the contact page — every profile there is verified." },
+      { k: ["future", "agi", "singularity", "superintelligen", "prediction"], r: "His read: computer-use agents go mainstream by 2026-28, open-weight parity at the useful layer, AI accelerating disease research — with honest caution on displacement and agent misuse. Probability-tagged takes on the future page." },
+      { k: ["joke", "funny", "fun"], r: "Why did the agent cross the road? The tool call said to. (He posts 100+ AI updates a day on X — humor is a survival skill.)" },
+      { k: ["secret", "easter", "konami", "egg"], r: "Up up down down left right left right B A. That is all I will say." },
+      { k: ["resume", "cv"], r: "The site IS the resume — every claim links to public evidence: github.com/aniruddhaadak80, dev.to/aniruddhaadak, and the verified credentials on the about page." },
+      { k: ["geo", "seo", "llms"], r: "This site practices what it sells: JSON-LD everywhere, llms.txt for AI engines, breadcrumb schema, consistent verified facts. Open llms.txt in the site root — that is the GEO blueprint." },
+      { k: ["help", "what can you"], r: "Try: projects · hire · skills · open source · contact · future · joke · secret. Or tap the chips below." },
+      { k: ["hello", "hi", "hey", "yo"], r: "Hey. I am AgentAni — a tiny rule-based agent living in this portfolio. Ask about projects, hiring, skills, or open source." },
+    ];
+    const chips = ["projects", "hire him", "skills", "open source", "contact"];
+    chips.forEach((c) => {
+      const b = document.createElement("button");
+      b.className = "chip";
+      b.textContent = c;
+      b.addEventListener("click", () => { input.value = c; send(); });
+      chipsEl.appendChild(b);
+    });
+
+    const add = (html, who) => {
+      const d = document.createElement("div");
+      d.className = "chat-m " + who;
+      d.innerHTML = html;
+      msgs.appendChild(d);
+      msgs.scrollTop = msgs.scrollHeight;
+    };
+    let greeted = false;
+    const answer = (q) => {
+      const ql = q.toLowerCase();
+      const hit = knowledge.find((item) => item.k.some((kw) => ql.includes(kw)));
+      const typing = document.createElement("div");
+      typing.className = "chat-m bot typing";
+      typing.innerHTML = "<span></span><span></span><span></span>";
+      msgs.appendChild(typing); msgs.scrollTop = msgs.scrollHeight;
+      setTimeout(() => {
+        typing.remove();
+        add(hit ? hit.r : "I am a small rule-based agent, so try: projects, hire, skills, open source, contact, future — or type help.", "bot");
+      }, 550 + Math.random() * 450);
+    };
+    const send = () => {
+      const v = input.value.trim();
+      if (!v) return;
+      add(v.replace(/</g, "&lt;"), "user");
+      input.value = "";
+      answer(v);
+    };
+    const openChat = () => {
+      wrap.classList.add("open");
+      launcher.classList.remove("ping");
+      if (!greeted) {
+        greeted = true;
+        add("Hey — Aniruddha here (well, my agent does the typing). Ask about projects, hiring, skills or open source. Or tap a chip below.", "bot");
+      }
+      setTimeout(() => input.focus(), 250);
+    };
+    wrap.querySelector(".chat-x").addEventListener("click", () => wrap.classList.remove("open"));
+    launcher.addEventListener("click", () => (wrap.classList.contains("open") ? wrap.classList.remove("open") : openChat()));
+    wrap.querySelector(".chat-send").addEventListener("click", send);
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") send(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && wrap.classList.contains("open")) wrap.classList.remove("open");
+    });
+    setTimeout(() => launcher.classList.add("ping"), 4000);
+  };
+  buildChat();
 })();

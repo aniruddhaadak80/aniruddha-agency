@@ -17,6 +17,9 @@
 <meta name="twitter:creator" content="@aniruddhadak">
 <meta name="theme-color" content="#0a0a0c">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://fonts.googleapis.com">
@@ -104,12 +107,13 @@
     <div class="hero-actions reveal in-view" data-delay="3">
       <a class="btn btn-primary" href="projects.html">explore the work <span class="arr">&rarr;</span></a>
       <a class="btn btn-ghost" href="agency.html">hire the agency</a>
+      <button class="btn btn-ghost" data-share title="Share this site">share &middot; <span class="kbd">?</span> for shortcuts</button>
     </div>
     <div class="code-line reveal in-view" data-delay="4"><i>$</i> whoami <i>·</i> kolkata, india <i>·</i> btech cse final year <i>·</i> shipping since 2022</div>
     <div class="hero-hint reveal in-view" data-delay="4" data-cmdk-open role="button" tabindex="0" title="Open command palette">press <span class="kbd">Ctrl</span> + <span class="kbd">K</span> anywhere to jump to any page, project or profile <span style="color:var(--red-bright)">&rarr;</span></div>
     <div class="hero-meta reveal in-view" data-delay="5">
       <div><strong><span data-count="354" data-suffix="+">0</span></strong><span>open source PRs merged</span></div>
-      <div><strong><span data-count="145" data-suffix="+">0</span></strong><span>repositories shipped</span></div>
+      <div><strong><span data-count="145" data-suffix="+">0</span><span id="live-repos" class="mono" style="font-size:.6em;color:var(--red-bright)"></span></strong><span>repositories shipped</span></div>
       <div><strong><span data-count="350" data-suffix="+">0</span></strong><span>technical articles</span></div>
       <div><strong><span data-count="25" data-suffix="+">0</span></strong><span>ai apps built</span></div>
     </div>
