@@ -391,6 +391,46 @@ footer{border-top:1px solid var(--line);padding:64px 0 40px;margin-top:60px}
 .term-input{width:100%;background:transparent;border:0;border-top:1px solid var(--line);padding:14px 20px;color:var(--text);font-family:var(--font-mono);font-size:.82rem;outline:none}
 .term-input::placeholder{color:var(--muted)}
 .term-prompt{color:var(--red-bright)}
+
+/* ---------- marquee 2 (vertical, side rail on wide screens) ---------- */
+.side-rail{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;align-items:center;gap:18px;pointer-events:none}
+.side-rail a{pointer-events:auto;writing-mode:vertical-rl;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s}
+.side-rail a:hover{color:var(--red-bright)}
+.side-rail::before,.side-rail::after{content:"";width:1px;height:52px;background:linear-gradient(180deg,transparent,rgba(239,68,68,.6),transparent)}
+@media(max-width:1180px){.side-rail{display:none}}
+
+/* ---------- marquee 2 (bottom ticker) ---------- */
+.marquee.rev .marquee-track{animation-direction:reverse}
+.marquee-stack .marquee{border-bottom:0}
+.marquee-stack .marquee:last-child{border-bottom:1px solid var(--line)}
+
+/* ---------- spotlight card ---------- */
+.card.spot{position:relative}
+.card.spot::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(239,68,68,.10),transparent 55%);opacity:0;transition:opacity .35s;pointer-events:none}
+.card.spot:hover::after{opacity:1}
+
+/* ---------- scroll snap for mobile nav ---------- */
+@media(max-width:880px){
+  .nav-links.open li{opacity:0;transform:translateY(16px);animation:navIn .4s cubic-bezier(.2,.8,.2,1) forwards}
+  .nav-links.open li:nth-child(1){animation-delay:.03s}
+  .nav-links.open li:nth-child(2){animation-delay:.06s}
+  .nav-links.open li:nth-child(3){animation-delay:.09s}
+  .nav-links.open li:nth-child(4){animation-delay:.12s}
+  .nav-links.open li:nth-child(5){animation-delay:.15s}
+  .nav-links.open li:nth-child(6){animation-delay:.18s}
+  .nav-links.open li:nth-child(7){animation-delay:.21s}
+  .nav-links.open li:nth-child(8){animation-delay:.24s}
+}
+@keyframes navIn{to{opacity:1;transform:none}}
+
+/* ---------- print stylesheet ---------- */
+@media print{
+  .nav,.aurora,.grid-overlay,.grain,.cursor-glow,.preloader,.back-top,.cmdk-overlay,.toast,.scroll-hint,.marquee,.side-rail,.cta-band,.hero-actions,.scroll-progress{display:none !important}
+  body{background:#fff;color:#111}
+  .card,.panel,.manifesto{border-color:#ddd;background:#fff;box-shadow:none}
+  .grad-text{color:#991b1b !important;-webkit-text-fill-color:#991b1b}
+  a{color:#991b1b}
+}
 .clock-strip b{color:var(--red-bright);font-weight:600}
 
 /* ---------- responsive refinements ---------- */

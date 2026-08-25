@@ -417,6 +417,64 @@
     });
   }
 
+  /* ---------- spotlight cards ---------- */
+  if (window.matchMedia("(pointer:fine)").matches) {
+    document.querySelectorAll(".card").forEach((card) => {
+      card.classList.add("spot");
+      card.addEventListener("mousemove", (ev) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (ev.clientX - r.left) + "px");
+        card.style.setProperty("--my", (ev.clientY - r.top) + "px");
+      });
+    });
+  }
+
+  /* ---------- konami easter egg ---------- */
+  const konami = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+  let kIdx = 0;
+  document.addEventListener("keydown", (e) => {
+    kIdx = e.key === konami[kIdx] ? kIdx + 1 : (e.key === konami[0] ? 1 : 0);
+    if (kIdx === konami.length) {
+      kIdx = 0;
+      document.body.style.animation = "none";
+      showToast("agent mode unlocked. you found the easter egg.");
+      burstParticles();
+    }
+  });
+
+  function burstParticles() {
+    const c = document.createElement("canvas");
+    c.style.cssText = "position:fixed;inset:0;z-index:9999;pointer-events:none";
+    c.width = innerWidth; c.height = innerHeight;
+    document.body.appendChild(c);
+    const ctx = c.getContext("2d");
+    const COLORS = ["239,68,68","255,255,255","255,107,94","185,28,28"];
+    const parts = Array.from({length: 160}, () => ({
+      x: innerWidth/2, y: innerHeight/2,
+      vx: (Math.random()-.5)*14, vy: (Math.random()-.5)*14 - 4,
+      r: Math.random()*4+1, c: COLORS[(Math.random()*COLORS.length)|0], life: 1,
+    }));
+    let alive = true;
+    (function loop() {
+      if (!alive) return;
+      ctx.clearRect(0,0,c.width,c.height);
+      let anyAlive = false;
+      parts.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.18; p.life -= 0.012;
+        if (p.life > 0) {
+          anyAlive = true;
+          ctx.beginPath();
+          ctx.arc(p.x,p.y,p.r,0,7);
+          ctx.fillStyle = `rgba(${p.c},${p.life})`;
+          ctx.fill();
+        }
+      });
+      if (anyAlive) requestAnimationFrame(loop);
+      else { c.remove(); alive = false; }
+    })();
+    setTimeout(() => { alive = false; c.remove(); }, 5000);
+  }
+
   /* ---------- Kolkata live clock ---------- */
   const clocks = document.querySelectorAll("[data-clock]");
   if (clocks.length) {
