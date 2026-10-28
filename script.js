@@ -5,6 +5,10 @@
 (function () {
   "use strict";
 
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.documentElement.classList.add("js");
 
@@ -404,14 +408,14 @@
     termInput.addEventListener("keydown", (e) => {
       if (e.key !== "Enter") return;
       const raw = termInput.value.trim().toLowerCase();
-      termBody.insertAdjacentHTML("beforeend", `<div><span class="term-prompt">aniruddha@agency:~$</span> ${raw}</div>`);
+      termBody.insertAdjacentHTML("beforeend", `<div><span class="term-prompt">aniruddha@agency:~$</span> ${escapeHtml(raw)}</div>`);
       termInput.value = "";
       const fn = cmds[raw];
       if (fn) {
         if (typeof fn === "string") termBody.insertAdjacentHTML("beforeend", `<div style="color:var(--muted)">${fn}</div>`);
         else fn();
       } else if (raw) {
-        termBody.insertAdjacentHTML("beforeend", `<div style="color:#f97316">unknown: ${raw} — try help</div>`);
+        termBody.insertAdjacentHTML("beforeend", `<div style="color:#f97316">unknown: ${escapeHtml(raw)} — try help</div>`);
       }
       termBody.scrollTop = termBody.scrollHeight;
     });
