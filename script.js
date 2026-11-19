@@ -195,17 +195,24 @@
   const roleEl = document.getElementById("role-typer");
   if (roleEl) {
     const roles = JSON.parse(roleEl.dataset.roles);
-    let ri = 0, ci = 0, deleting = false;
-    const tick = () => {
-      const word = roles[ri];
-      ci += deleting ? -1 : 1;
-      roleEl.textContent = word.slice(0, ci);
-      let delay = deleting ? 38 : 74;
-      if (!deleting && ci === word.length) { delay = 1900; deleting = true; }
-      else if (deleting && ci === 0) { deleting = false; ri = (ri + 1) % roles.length; delay = 420; }
-      setTimeout(tick, prefersReduced ? 0 : delay);
-    };
-    tick();
+    if (prefersReduced) {
+      // Reduced motion means no typing animation at all. Forcing the tick
+      // delay to 0 made the hero the busiest thing on the page for the people
+      // who asked for less movement, so settle on the first role instead.
+      roleEl.textContent = roles[0];
+    } else {
+      let ri = 0, ci = 0, deleting = false;
+      const tick = () => {
+        const word = roles[ri];
+        ci += deleting ? -1 : 1;
+        roleEl.textContent = word.slice(0, ci);
+        let delay = deleting ? 38 : 74;
+        if (!deleting && ci === word.length) { delay = 1900; deleting = true; }
+        else if (deleting && ci === 0) { deleting = false; ri = (ri + 1) % roles.length; delay = 420; }
+        setTimeout(tick, delay);
+      };
+      tick();
+    }
   }
 
   /* ---------- 3D tilt cards ---------- */
